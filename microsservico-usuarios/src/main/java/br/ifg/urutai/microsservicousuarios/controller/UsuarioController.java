@@ -56,9 +56,10 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity<String> realizarLogin(@RequestBody LoginDTO dto) {
-        service.buscarPorEmail(dto.email());
+        Usuario usuario = service.buscarPorEmail(dto.email());
 
-        String token = authGrpcClient.autenticar(dto.email(), dto.senha());
+        String token = authGrpcClient.autenticar(dto.email(), dto.senha(), usuario.getSenha());
+
         return ResponseEntity.ok(token);
     }
 }

@@ -9,7 +9,8 @@ service AuthService {
 
 message LoginRequest {
   string email = 1;
-  string senha = 2;
+  string senhaDigitada = 2; 
+  string senhaDoBanco = 3;
 }
 
 message LoginResponse {

@@ -68,7 +68,8 @@ public class UsuarioService {
         repository.delete(usuario);
     }
 
-    public void buscarPorEmail(String email) {
-        repository.findByEmail(email).ifPresent(usuario -> {});
+    public Usuario buscarPorEmail(String email) {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o e-mail: " + email));
     }
 }

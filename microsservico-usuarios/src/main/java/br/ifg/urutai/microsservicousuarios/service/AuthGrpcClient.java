@@ -1,5 +1,7 @@
 package br.ifg.urutai.microsservicousuarios.service;
 
+import br.ifg.urutai.microsservicousuarios.grpc.LoginRequest;
+import br.ifg.urutai.microsservicousuarios.grpc.LoginResponse;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 
@@ -9,15 +11,15 @@ public class AuthGrpcClient {
     @GrpcClient("microsservico-autenticacao")
     private br.ifg.urutai.microsservicousuarios.grpc.AuthServiceGrpc.AuthServiceBlockingStub authStub;
 
-    public String autenticar(String email, String senha) {
-        // Monta o objeto que será enviado pela rede
-        br.ifg.urutai.microsservicousuarios.grpc.LoginRequest request = br.ifg.urutai.microsservicousuarios.grpc.LoginRequest.newBuilder()
+    public String autenticar(String email, String senhaDigitada, String senhaDoBanco) {
+        LoginRequest request = LoginRequest.newBuilder()
                 .setEmail(email)
-                .setSenha(senha)
+                .setSenhaDigitada(senhaDigitada)
+                .setSenhaDoBanco(senhaDoBanco)
                 .build();
 
         try {
-            br.ifg.urutai.microsservicousuarios.grpc.LoginResponse response = authStub.validarLogin(request);
+            LoginResponse response = authStub.validarLogin(request);
 
             if (response.getSucesso()) {
                 return response.getToken();
