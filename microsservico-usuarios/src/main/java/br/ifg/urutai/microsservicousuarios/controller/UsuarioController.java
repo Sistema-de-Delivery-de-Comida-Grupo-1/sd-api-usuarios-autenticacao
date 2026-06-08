@@ -2,6 +2,7 @@ package br.ifg.urutai.microsservicousuarios.controller;
 
 import br.ifg.urutai.microsservicousuarios.dto.LoginDTO;
 import br.ifg.urutai.microsservicousuarios.dto.UsuarioCadastroDTO;
+import br.ifg.urutai.microsservicousuarios.dto.UsuarioResumoDTO;
 import br.ifg.urutai.microsservicousuarios.model.Usuario;
 import br.ifg.urutai.microsservicousuarios.service.AuthGrpcClient;
 import br.ifg.urutai.microsservicousuarios.service.UsuarioService;
@@ -57,9 +58,15 @@ public class UsuarioController {
     @PostMapping("/login")
     public ResponseEntity<String> realizarLogin(@RequestBody LoginDTO dto) {
         Usuario usuario = service.buscarPorEmail(dto.email());
-
         String token = authGrpcClient.autenticar(dto.email(), dto.senha(), usuario.getSenha());
 
         return ResponseEntity.ok(token);
+    }
+    @GetMapping("/{id}/resumo")
+    public ResponseEntity<UsuarioResumoDTO> buscarResumoPorId(@PathVariable Long id) {
+        Usuario usuario = service.buscarPorId(id);
+
+        UsuarioResumoDTO resumo = new UsuarioResumoDTO(usuario.getId(), usuario.getNome());
+        return ResponseEntity.ok(resumo);
     }
 }
